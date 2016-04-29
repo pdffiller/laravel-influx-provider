@@ -1,0 +1,28 @@
+{
+  "name": "pdffiller/laravel-influx-provider",
+  "description": "A minimal service provider to set up and use InfluxDB SDK in Laravel 5",
+  "keywords": ["influx-db", "laravel"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Anton Balandin",
+      "email": "anbalandin@gmail.com"
+    }
+  ],
+  "require": {
+    "illuminate/log": "5.2.*",
+    "illuminate/support": "5.2.*",
+    "influxdb/influxdb-php": "^1.3",
+    "monolog/monolog": "^1.19"
+
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0",
+    "mockery/mockery": "0.9.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pdffiller\\LaravelInfluxProvider\\": "src/"
+    }
+  }
+}
