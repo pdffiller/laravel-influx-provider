@@ -2,7 +2,7 @@
 
 return [
 	/*
-	 * Could take values 'http', 'https', 'udp'
+	 * Protocol could take values 'http', 'https', 'udp'
 	 */
 	'protocol' => 'http',
 
@@ -14,5 +14,15 @@ return [
 
 	'port' => '1111',
 
-	'database' => 'main'
+	'database' => 'main',
+	
+	/*
+	 * Use Queue for sending to InfluxDB, if 'true'
+	 */
+	'use_queue' => 'true',
+	
+	/**
+	 * Use InfluxDB for error/exception collector if 'true'
+	 */
+	'use_monolog_handler' => 'true'
 ];

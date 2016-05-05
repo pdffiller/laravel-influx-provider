@@ -14,13 +14,16 @@ class InfluxDBServiceProvider extends ServiceProvider
             __DIR__ . '/config/InfluxDB.php' => config_path('influxdb.php')
         ]);
 
-        $handler = new InfluxDBMonologHandler();
+        if (config('influxdb.use_monolog_handler') === 'true') {
+            $handler = new InfluxDBMonologHandler();
+            $handler->setFormatter(new InfluxDBFormatter());
 
-        $monolog = Log::getMonolog();
-        $monolog->pushHandler($handler);
+            $monolog = Log::getMonolog();
+            $monolog->pushHandler($handler);
 
-        $new_log = new Writer($monolog, Log::getEventDispatcher());
-        Log::swap($new_log);
+            $new_log = new Writer($monolog, Log::getEventDispatcher());
+            Log::swap($new_log);
+        }
     }
 
     public function register()
