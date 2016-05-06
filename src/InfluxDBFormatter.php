@@ -15,7 +15,7 @@ class InfluxDBFormatter extends NormalizerFormatter
 
         $message = $this->prepareMessage($record);
 
-        return $message['formatted'];
+        return $message;
     }
 
     /**
@@ -28,24 +28,40 @@ class InfluxDBFormatter extends NormalizerFormatter
         $message['name'] = 'Error';
         $message['value'] = 1;
         $message['timestamp'] = exec('date +%s%N');
-        
-        $fields['ServerName'] = gethostname();
+
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $fields['serverName'] = $_SERVER['REMOTE_ADDR'];
+        }
 
         if (isset($record['level'])) {
-            $fields['Severity'] = $this->rfc5424ToSeverity($record['level']);
+            $fields['severity'] = $this->rfc5424ToSeverity($record['level']);
         }
 
         if (isset($_SERVER['REQUEST_URI'])) {
-            $fields['requestUri'] = $_SERVER['REQUEST_URI'];
+            $fields['URI'] = $_SERVER['REQUEST_URI'];
         }
 
         if (isset($_SERVER['REQUEST_METHOD'])) {
-            $fields['requestMethod'] = $_SERVER['REQUEST_METHOD'];
+            $fields['method'] = $_SERVER['REQUEST_METHOD'];
         }
 
         if (isset($record['context']['user_id'])) {
             $fields['user_id'] = $record['context']['user_id'];
             unset($record['context']['user_id']);
+        }
+
+        if (isset($record['context']['project_id'])) {
+            $fields['project_id'] = $record['context']['project_id'];
+            unset($record['context']['project_id']);
+        }
+
+        if (isset($record['context']['file'])) {
+            $fields['file'] = $this->replaceDigitData($record['context']['file']);
+            unset($record['context']['file']);
+        }
+
+        if (isset($record['context']['id'])) {
+            unset($record['context']['id']);
         }
 
         if (!empty($record['context'])) {
@@ -78,5 +94,11 @@ class InfluxDBFormatter extends NormalizerFormatter
         $result = isset($levels[$level]) ? $levels[$level] : $levels[600];
 
         return $result;
+    }
+
+    private function replaceDigitData($str)
+    {
+        $pattern = '~\/[0-9]+~';
+        return preg_replace($pattern, '/*', $str);
     }
 }
