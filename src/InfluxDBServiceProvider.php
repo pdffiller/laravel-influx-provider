@@ -29,17 +29,24 @@ class InfluxDBServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('InfluxDB\Database', function($app) {
-            $protocol = config('influxdb.protocol') === 'http' ? '' : config('influxdb.protocol').'+';
-            $database = \InfluxDB\Client::fromDSN(
-                sprintf('%sinfluxdb://%s:%s@%s:%s/%s',
-                    $protocol,
-                    config('influxdb.user'),
-                    config('influxdb.password'),
-                    config('influxdb.host'),
-                    config('influxdb.port'),
-                    config('influxdb.database')
-                )
-            );
+            $protocol = 'influxdb';
+            if (in_array(config('influxdb.protocol'), ['https', 'udp'])) {
+                $protocol = config('influxdb.protocol') . '+' . $protocol;
+            }
+            try {
+                $database = \InfluxDB\Client::fromDSN(
+                    sprintf('%s://%s:%s@%s:%s/%s',
+                        $protocol,
+                        config('influxdb.user'),
+                        config('influxdb.password'),
+                        config('influxdb.host'),
+                        config('influxdb.port'),
+                        config('influxdb.database')
+                    )
+                );
+            } catch (\Exception $e) {
+                return null;
+            }
 
             return $database;
         });
