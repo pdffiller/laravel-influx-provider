@@ -23,9 +23,6 @@ class InfluxDBMonologHandler extends AbstractProcessingHandler
         if (isset($record['formatted'])) {
             $event = $record['formatted'];
         }
-        if (isset($event['timestamp'])) {
-            $event['timestamp'] = (int) $event['timestamp']; // Monolog automatically cast it as String
-        }
         if ( config('influxdb.use_queue') === 'true') {
             Queue::push(InfluxDBJob::class, $event, 'influx');
             return;

@@ -4,6 +4,7 @@ namespace Pdffiller\LaravelInfluxProvider;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Log\Writer;
+use Monolog\Logger;
 use Log;
 
 class InfluxDBServiceProvider extends ServiceProvider
@@ -15,7 +16,7 @@ class InfluxDBServiceProvider extends ServiceProvider
         ]);
 
         if (config('influxdb.use_monolog_handler') === 'true') {
-            $handler = new InfluxDBMonologHandler();
+            $handler = new InfluxDBMonologHandler(Logger::NOTICE);
             $handler->setFormatter(new InfluxDBFormatter());
 
             $monolog = Log::getMonolog();

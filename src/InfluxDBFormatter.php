@@ -30,47 +30,50 @@ class InfluxDBFormatter extends NormalizerFormatter
         $message['timestamp'] = exec('date +%s%N');
 
         if (isset($_SERVER['REMOTE_ADDR'])) {
-            $fields['serverName'] = $_SERVER['REMOTE_ADDR'];
+            $tags['serverName'] = $_SERVER['REMOTE_ADDR'];
         }
 
         if (isset($record['level'])) {
-            $fields['severity'] = $this->rfc5424ToSeverity($record['level']);
+            $tags['severity'] = $this->rfc5424ToSeverity($record['level']);
         }
 
         if (isset($_SERVER['REQUEST_URI'])) {
-            $fields['URI'] = $_SERVER['REQUEST_URI'];
+            $tags['endpoint_url'] = $_SERVER['REQUEST_URI'];
         }
 
         if (isset($_SERVER['REQUEST_METHOD'])) {
-            $fields['method'] = $_SERVER['REQUEST_METHOD'];
+            $tags['method'] = $_SERVER['REQUEST_METHOD'];
         }
 
         if (isset($record['context']['user_id'])) {
-            $fields['user_id'] = $record['context']['user_id'];
-            unset($record['context']['user_id']);
+            $tags['user_id'] = $record['context']['user_id'];
         }
 
         if (isset($record['context']['project_id'])) {
-            $fields['project_id'] = $record['context']['project_id'];
-            unset($record['context']['project_id']);
+            $tags['project_id'] = $record['context']['project_id'];
         }
 
         if (isset($record['context']['file'])) {
-            $fields['file'] = $this->replaceDigitData($record['context']['file']);
-            unset($record['context']['file']);
+            $tags['file'] = $this->replaceDigitData($record['context']['file']);
         }
 
-        if (isset($record['context']['id'])) {
-            unset($record['context']['id']);
-        }
-
-        if (!empty($record['context'])) {
-            foreach($record['context'] as $key => $value) {
-                $fields[$key] = $value;
+        if (isset($record['context']['event']) && isset($record['context']['event']['api_stats']) && isset($record['context']['event']['api_stats'][0])) {
+            foreach ($record['context']['event']['api_stats'][0] as $k => $v) {
+                if (is_string($v) || is_int($v)) {
+                    $tags[$k] = $v;
+                }
             }
         }
 
-        $message['tags'] = $fields;
+        if (count($tags)) {
+            foreach ($tags as $k => $v) {
+                if (is_numeric($v)) {
+                    $message['fields'][$k] = (int) $v;
+                }
+            }
+
+            $message['tags'] = $tags;
+        }
 
         return $message;
     }
