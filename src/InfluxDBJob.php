@@ -36,11 +36,7 @@ class InfluxDBJob
 
         try {
             $result = Influx::writePoints($point);
-        } catch (\Exception $e) {
-            Log::alert('Influx write Exception', [
-                'event' => $event,
-                'message' => $e->getMessage()
-            ]);
+        } catch (Exception $e) {
             $this->job->fail(new Resque_Exception($e->getMessge(), $e->gteCode(), $e));
         }
 

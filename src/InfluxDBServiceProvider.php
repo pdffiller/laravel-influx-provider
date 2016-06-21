@@ -4,6 +4,7 @@ namespace Pdffiller\LaravelInfluxProvider;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Log\Writer;
+use InfluxDB\Client as InfluxClient;
 use Monolog\Logger;
 use Log;
 
@@ -16,7 +17,7 @@ class InfluxDBServiceProvider extends ServiceProvider
         ]);
 
         if (config('influxdb.use_monolog_handler') === 'true') {
-            $handler = new InfluxDBMonologHandler(Logger::NOTICE);
+            $handler = new InfluxDBMonologHandler($this->getLoggingLevel());
             $handler->setFormatter(new InfluxDBFormatter());
 
             $monolog = Log::getMonolog();
@@ -35,7 +36,7 @@ class InfluxDBServiceProvider extends ServiceProvider
                 $protocol = config('influxdb.protocol') . '+' . $protocol;
             }
             try {
-                $database = \InfluxDB\Client::fromDSN(
+                return InfluxClient::fromDSN(
                     sprintf('%s://%s:%s@%s:%s/%s',
                         $protocol,
                         config('influxdb.user'),
@@ -46,10 +47,23 @@ class InfluxDBServiceProvider extends ServiceProvider
                     )
                 );
             } catch (\Exception $e) {
+                // TODO replace with something better
                 return null;
             }
-
-            return $database;
         });
+    }
+
+    private function getLoggingLevel()
+    {
+        return in_array(config('influxdb.logging_level'), [
+            'DEBUG',
+            'INFO',
+            'NOTICE',
+            'WARNING',
+            'ERROR',
+            'CRITICAL',
+            'ALERT',
+            'EMERGENCY'
+        ]) ? config('influxdb.logging_level') : Logger::NOTICE;
     }
 }

@@ -57,7 +57,7 @@ class InfluxDBFormatter extends NormalizerFormatter
             $tags['file'] = $this->replaceDigitData($record['context']['file']);
         }
 
-        if (isset($record['context']['event']) && isset($record['context']['event']['api_stats']) && isset($record['context']['event']['api_stats'][0])) {
+        if (isset($record['context']['event']['api_stats'][0])) {
             foreach ($record['context']['event']['api_stats'][0] as $k => $v) {
                 if (is_string($v) || is_int($v)) {
                     $tags[$k] = $v;
@@ -73,6 +73,10 @@ class InfluxDBFormatter extends NormalizerFormatter
             }
 
             $message['tags'] = $tags;
+        }
+
+        if (isset($message['fields']['Debug']['message'])) {
+            $message['fields']['Debug']['message'] = $this->trimLines($message['fields']['Debug']['message']);
         }
 
         return $message;
@@ -101,7 +105,22 @@ class InfluxDBFormatter extends NormalizerFormatter
 
     private function replaceDigitData($str)
     {
-        $pattern = '~\/[0-9]+~';
-        return preg_replace($pattern, '/*', $str);
+        $str = preg_replace('~\/[0-9]+~', '/*', $str);
+        $str = preg_replace('~\=[0-9]+~', '=*', $str);
+            
+        return $str;
+    }
+
+    private function trimLines($message)
+    {
+        $limit = config('influxdb.log_message_lines_limit');
+        if ($limit) {
+            $message_array = explode("\n", $message);
+            if ( $limit < count($message_array)) {
+                $message = implode("\n", array_slice($message_array, 0, $limit));
+            }
+        }
+
+        return $message;
     }
 }
