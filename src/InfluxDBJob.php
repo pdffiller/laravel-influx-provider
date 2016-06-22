@@ -37,7 +37,7 @@ class InfluxDBJob
         try {
             $result = Influx::writePoints($point);
         } catch (Exception $e) {
-            $this->job->fail(new Resque_Exception($e->getMessge(), $e->gteCode(), $e));
+            $this->job->fail(new Resque_Exception());
         }
 
         return $result;
