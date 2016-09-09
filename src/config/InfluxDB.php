@@ -20,6 +20,11 @@ return [
 	 * Use Queue for sending to InfluxDB, if 'true'
 	 */
 	'use_queue' => env('LARAVEL_INFLUX_PROVIDER_USE_QUEUE', 'true'),
+
+    /**
+     * Queue name
+     */
+    'queue_name' => env('LARAVEL_INFLUX_PROVIDER_QUEUE_NAME', 'influx'),
 	
 	/**
 	 * Use InfluxDB for error/exception collector if 'true'

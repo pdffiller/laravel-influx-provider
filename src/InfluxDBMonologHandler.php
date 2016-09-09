@@ -24,7 +24,7 @@ class InfluxDBMonologHandler extends AbstractProcessingHandler
             $event = $record['formatted'];
         }
         if ( config('influxdb.use_queue') === 'true') {
-            Queue::push(InfluxDBJob::class, $event, 'influx');
+            Queue::push(InfluxDBJob::class, $event, config('influxdb.queue_name'));
             return;
         }
 

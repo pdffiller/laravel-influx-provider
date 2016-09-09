@@ -6,7 +6,7 @@ A minimal service provider to set up and use InfluxDB SDK in Laravel 5
 ```js
 "require": {
 //  ...
-    "pdffiller/laravel-influx-provider": "^1.1"
+    "pdffiller/laravel-influx-provider": "^1.2"
 }
 ```
 - Add a line to `config/app.php`
@@ -46,4 +46,9 @@ try {
 } catch (\InfluxDB\Exception $e) {
     // something is wrong, track this
 }
+```
+
+Also you can send data to another database like this:
+```php
+Influx::selectDB($dbName)->writePoints($point);
 ```

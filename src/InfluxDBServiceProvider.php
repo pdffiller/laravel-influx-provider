@@ -5,6 +5,7 @@ namespace Pdffiller\LaravelInfluxProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Log\Writer;
 use InfluxDB\Client as InfluxClient;
+use InfluxDB\Client\Exception as ClientException;
 use Monolog\Logger;
 use Log;
 
@@ -30,7 +31,7 @@ class InfluxDBServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton('InfluxDB\Database', function($app) {
+        $this->app->singleton('InfluxDB\Client', function($app) {
             $protocol = 'influxdb';
             if (in_array(config('influxdb.protocol'), ['https', 'udp'])) {
                 $protocol = config('influxdb.protocol') . '+' . $protocol;
@@ -43,11 +44,11 @@ class InfluxDBServiceProvider extends ServiceProvider
                         config('influxdb.password'),
                         config('influxdb.host'),
                         config('influxdb.port'),
-                        config('influxdb.database')
+                        '' //config('influxdb.database')
                     )
                 );
-            } catch (\Exception $e) {
-                // TODO replace with something better
+            } catch (ClientException $e) {
+                // die silently
                 return null;
             }
         });
