@@ -11,14 +11,11 @@ class InfluxDBFacade extends Facade
         return 'InfluxDB\Client';
     }
 
-    /**
-     * @param array ...$params
-     * @return bool
-     */
-    public static function writePoints(...$params)
+    public static function __callStatic($method, $arguments)
     {
-        $instance = static::getFacadeRoot();
-
-        return $instance->selectDB(config('influxdb.database'))->writePoints(...$params);
+        return static::getFacadeRoot()
+            ->selectDB(config('influxdb.database'))
+            ->$method(...$arguments)
+        ;
     }
 }
