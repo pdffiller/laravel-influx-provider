@@ -6,7 +6,7 @@ A minimal service provider to set up and use InfluxDB SDK in Laravel 5
 ```js
 "require": {
 //  ...
-    "pdffiller/laravel-influx-provider": "^1.2"
+    "pvgennip/laravel-influx-provider": "^1.3"
 }
 ```
 - Add a line to `config/app.php`
