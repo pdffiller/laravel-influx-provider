@@ -4,9 +4,15 @@ A minimal service provider to set up and use InfluxDB SDK in Laravel 5
 ### Installation
 - Add a line to *require* section of `composer.json` and execute `$ composer install`
 ```js
+"repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/pvgennip/laravel-influx-provider"
+        }
+    ],
 "require": {
 //  ...
-    "pvgennip/laravel-influx-provider": "^1.3"
+    "pvgennip/laravel-influx-provider": "dev-laravel-5.4"
 }
 ```
 - Add these lines to `config/app.php`
