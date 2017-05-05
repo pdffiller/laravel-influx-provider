@@ -9,13 +9,22 @@ A minimal service provider to set up and use InfluxDB SDK in Laravel 5
     "pvgennip/laravel-influx-provider": "^1.3"
 }
 ```
-- Add a line to `config/app.php`
+- Add these lines to `config/app.php`
 ```php
 'providers' => [
 //  ...
     Pdffiller\LaravelInfluxProvider\InfluxDBServiceProvider::class,
 ]
+
+
+'aliases' => [
+// ...
+    'Influx' => Pdffiller\LaravelInfluxProvider\InfluxDBFacade::class,
+]
+
 ```
+
+
 - Define env variables to connect to InfluxDB
 ```
 LARAVEL_INFLUX_PROVIDER_PROTOCOL=http
