@@ -1,5 +1,5 @@
 {
-  "name": "pdffiller/laravel-influx-provider",
+  "name": "pvgennip/laravel-influx-provider",
   "description": "Service provider to set up and use InfluxDB SDK in Laravel 5",
   "keywords": ["influx-db", "laravel"],
   "license": "MIT",
