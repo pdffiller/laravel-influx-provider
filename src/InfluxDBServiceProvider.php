@@ -14,8 +14,10 @@ class InfluxDBServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/config/InfluxDB.php' => config_path('influxdb.php')
+            $this->configPath() => config_path('influxdb.php')
         ]);
+        
+        $this->mergeConfigFrom($this->configPath(), 'influxdb');
 
         if (config('influxdb.use_monolog_handler') === 'true') {
             $handler = new InfluxDBMonologHandler($this->getLoggingLevel());
@@ -32,6 +34,7 @@ class InfluxDBServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('InfluxDB\Client', function($app) {
+
             $protocol = 'influxdb';
             if (in_array(config('influxdb.protocol'), ['https', 'udp'])) {
                 $protocol = config('influxdb.protocol') . '+' . $protocol;
@@ -66,5 +69,10 @@ class InfluxDBServiceProvider extends ServiceProvider
             'ALERT',
             'EMERGENCY'
         ]) ? config('influxdb.logging_level') : Logger::NOTICE;
+    }
+
+    protected function configPath()
+    {
+        return __DIR__ . '/config/InfluxDB.php';
     }
 }
