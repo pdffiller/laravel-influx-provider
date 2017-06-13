@@ -2,20 +2,29 @@
 A minimal service provider to set up and use InfluxDB SDK in Laravel 5
 
 ### Installation
-- Add a line to *require* section of `composer.json` and execute `$ composer install`
+- Add a line to the *require* section of `composer.json` and execute `$ composer install`
 ```js
 "require": {
 //  ...
     "pdffiller/laravel-influx-provider": "^1.2"
 }
 ```
-- Add a line to `config/app.php`
+- Add these lines to `config/app.php`
 ```php
 'providers' => [
 //  ...
     Pdffiller\LaravelInfluxProvider\InfluxDBServiceProvider::class,
 ]
+
+
+'aliases' => [
+// ...
+    'Influx' => Pdffiller\LaravelInfluxProvider\InfluxDBFacade::class,
+]
+
 ```
+
+
 - Define env variables to connect to InfluxDB
 ```
 LARAVEL_INFLUX_PROVIDER_PROTOCOL=http
@@ -27,6 +36,11 @@ LARAVEL_INFLUX_PROVIDER_DATABASE=database_name
 ```
 
 ### How to use
+```php
+$client = new \Influx;
+$data   = $client::query('SELECT * from "data" ORDER BY time DESC LIMIT 1');
+```
+
 ```php
 $point = [
     new \InfluxDB\Point(
