@@ -37,4 +37,9 @@ return [
      * Use 0 for no limit
      */
     'log_message_lines_limit' => env('LARAVEL_INFLUX_PROVIDER_LOG_MESSAGE_LINES_LIMIT', 5),
+
+    /**
+     * Timeout
+     */
+    'timeout' => env('LARAVEL_INFLUX_PROVIDER_TIMEOUT', 0),
 ];

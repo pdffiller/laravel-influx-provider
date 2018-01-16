@@ -16,7 +16,7 @@ class InfluxDBServiceProvider extends ServiceProvider
         $this->publishes([
             $this->configPath() => config_path('influxdb.php')
         ]);
-        
+
         $this->mergeConfigFrom($this->configPath(), 'influxdb');
 
         if (config('influxdb.use_monolog_handler') === 'true') {
@@ -48,7 +48,7 @@ class InfluxDBServiceProvider extends ServiceProvider
                         config('influxdb.host'),
                         config('influxdb.port'),
                         '' //config('influxdb.database')
-                    )
+                    ), config('influxdb.timeout')
                 );
             } catch (ClientException $e) {
                 // die silently
