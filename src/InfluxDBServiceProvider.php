@@ -48,7 +48,10 @@ class InfluxDBServiceProvider extends ServiceProvider
                         config('influxdb.host'),
                         config('influxdb.port'),
                         '' //config('influxdb.database')
-                    ), config('influxdb.timeout')
+                    ),
+                    config('influxdb.timeout'),
+                    (config('influxdb.verify_ssl') === 'true'),
+                    config('influxdb.connect_timeout')
                 );
             } catch (ClientException $e) {
                 // die silently
