@@ -39,7 +39,17 @@ return [
     'log_message_lines_limit' => env('LARAVEL_INFLUX_PROVIDER_LOG_MESSAGE_LINES_LIMIT', 5),
 
     /**
+     * Verify SSL
+     */
+    'verify_ssl' => env('LARAVEL_INFLUX_PROVIDER_VERIFY_SSL', 'false'),
+
+    /**
      * Timeout
      */
     'timeout' => env('LARAVEL_INFLUX_PROVIDER_TIMEOUT', 0),
+
+    /**
+    * Connect Timeout
+    */
+    'connect_timeout' => env('LARAVEL_INFLUX_PROVIDER_CONNECT_TIMEOUT', 0),
 ];

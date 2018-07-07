@@ -6,7 +6,7 @@ A minimal service provider to set up and use InfluxDB SDK in Laravel 5
 ```js
 "require": {
 //  ...
-    "pdffiller/laravel-influx-provider": "^1.2"
+    "pdffiller/laravel-influx-provider": "^1.6"
 }
 ```
 - Add these lines to `config/app.php`
@@ -33,6 +33,9 @@ LARAVEL_INFLUX_PROVIDER_PASSWORD=some_password
 LARAVEL_INFLUX_PROVIDER_HOST=host
 LARAVEL_INFLUX_PROVIDER_PORT=8086
 LARAVEL_INFLUX_PROVIDER_DATABASE=database_name
+LARAVEL_INFLUX_PROVIDER_VERIFY_SSL=false
+LARAVEL_INFLUX_PROVIDER_TIMEOUT=0
+LARAVEL_INFLUX_PROVIDER_CONNECT_TIMEOUT=0
 ```
 
 ### How to use
