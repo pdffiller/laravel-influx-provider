@@ -70,7 +70,7 @@ Also you can send data to another database like this:
 Influx::selectDB($dbName)->writePoints($point);
 ```
 
-# License
+## License
 
 [airSlate](https://airslate.com/) and any contributors to this project each grants you a license, under its respective
 copyrights, to the Laravel InfluxDB provider and other content in this repository under the
